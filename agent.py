@@ -61,12 +61,21 @@ def write_note(filepath: str, content: str) -> str:
 TOOLS = [read_note, write_note]
 
 def initialize_agent():
-    """Initializes and returns the LangGraph agent instance."""
-    # Instantiating the LLM here ensures it gets the OPENAI_API_KEY from the environment at runtime.
-    llm = ChatOpenAI(model="gpt-4", temperature=0)
+    """Initializes and returns the LangGraph agent instance, explicitly passing the API key."""
+    
+    # --- 🛑 THE CRITICAL FIX 🛑 ---
+    # 1. Read the environment variable directly using os.environ.get()
+    openai_key = os.environ.get("OPENAI_API_KEY")
+
+    # 2. Pass the key directly to the ChatOpenAI client
+    llm = ChatOpenAI(model="gpt-4", temperature=0, api_key=openai_key)
+    
+    # Check if the key was found; if not, raise a clear error (optional but good practice)
+    if not openai_key:
+        raise ValueError("OPENAI_API_KEY environment variable not found.")
+
     agent_instance = create_react_agent(llm, TOOLS, prompt=SYSTEM_MESSAGE)
     return agent_instance
-
 
 async def run_agent(user_input: str) -> str:
     """Run the agent with a user query and return the response."""
