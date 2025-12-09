@@ -7,10 +7,13 @@ __pycache__/
 .Python
 *.so
 *.egg-info/
+dist/
+build/
 
 # Environment variables
 .env
 .env.local
+.env.*.local
 
 # Vercel
 .vercel/
@@ -25,7 +28,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Notes (created by the agent)
-*.txt
+# Agent-created notes (but NOT requirements.txt!)
 notes/
-.vercel
+*.txt
+!requirements.txt
+
+# Logs
+*.log
