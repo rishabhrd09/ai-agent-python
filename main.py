@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from agent import run_agent
-# import uvicorn
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -25,7 +24,6 @@ async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-
 @app.post("/agent", response_model=AgentResponse)
 async def invoke_agent(request: AgentRequest):
     """
@@ -45,4 +43,3 @@ async def invoke_agent(request: AgentRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error invoking agent: {str(e)}")
 
-# uvicorn.run(app, host="0.0.0.0", port=8000)
